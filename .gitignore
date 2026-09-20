@@ -1,0 +1,24 @@
+# Environment
+.env
+venv/
+__pycache__/
+*.pyc
+
+# Data (raw PDFs and processed vector store are not committed;
+# raw docs are downloaded per SOURCES.md, processed data is rebuilt via ingestion)
+data/raw/*.pdf
+data/raw/*.html
+data/processed/chroma/
+data/processed/*.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Docker
+*.log
+
+data/processed/text/

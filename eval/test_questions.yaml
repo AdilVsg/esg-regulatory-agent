@@ -1,0 +1,73 @@
+# Test question set (v1)
+# category:
+#   retrieval     -> answer must be found in the static corpus
+#   cross_doc     -> answer requires combining two documents
+#   out_of_corpus -> must trigger the web-search branch, not the retriever
+#   guardrail     -> must be refused (out of scope / not a factual regulatory question)
+#
+# expected_source locations verified by hand against the downloaded PDFs on
+# 2026-07-22. Page numbers are PDF page indices (pdftotext output), noted
+# against printed page numbers where the two differ (the URDs have front matter).
+
+questions:
+  - id: Q1
+    category: retrieval
+    question: "Which categories of undertakings fall within the scope of the CSRD, and what are the size thresholds?"
+    expected_source: "01_csrd_directive_2022_2464.pdf — Recital 17 (scope rationale); Article 5(2) (staged thresholds by employee count, financial years 2024-2026)"
+
+  - id: Q2
+    category: retrieval
+    question: "What is the double materiality principle as defined in ESRS 1, and how does it differ from single materiality?"
+    expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.8 para 21 (intro), PDF p.10-11 section 3.3 para 37 (formal definition: impact materiality + financial materiality)"
+
+  - id: Q3
+    category: retrieval
+    question: "What are the Scope 1, Scope 2 and Scope 3 greenhouse gas disclosure requirements under ESRS E1?"
+    expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.91-93, Disclosure Requirement E1-6 paras 44-51 (gross Scope 1/2/3 and total GHG emissions)"
+
+  - id: Q4
+    category: retrieval
+    question: "What are the six environmental objectives of the EU Taxonomy Regulation?"
+    expected_source: "03_taxonomy_regulation_2020_852.pdf — Article 9"
+
+  - id: Q5
+    category: retrieval
+    question: "What does the 'Do No Significant Harm' (DNSH) principle require, and how is it assessed?"
+    expected_source: "03_taxonomy_regulation_2020_852.pdf — Article 3(b) (criterion), Article 17 (per-objective significant harm tests)"
+
+  - id: Q6
+    category: retrieval
+    question: "Which phase-in reliefs are available to undertakings with fewer than 750 employees under ESRS 1?"
+    expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.26 para 137 (Appendix C reference), PDF p.37-41 Appendix C table (phase-in provisions, 750-employee threshold appears p.37 and p.39)"
+
+  - id: Q7
+    category: cross_doc
+    question: "How does Schneider Electric's reported Scope 3 emissions methodology compare with the requirements set out in ESRS E1?"
+    expected_source: "04_schneider_electric_urd_2024.pdf — PDF p.149 (printed p.147), section 2.2.2.1.5 'Gross Scopes 1, 2 and 3 and Total GHG emissions' (GHG Protocol Corporate Value Chain / Scope 3 Standard, upstream/downstream breakdown table) vs. 02_esrs_set1_2023_2772.pdf PDF p.91-93 (E1-6)"
+
+  - id: Q8
+    category: cross_doc
+    question: "Does BNP Paribas's sustainability report disclose its Green Asset Ratio, and how does this relate to the EU Taxonomy Regulation?"
+    expected_source: "05_bnp_paribas_urd_2025.pdf — PDF p.760, Table 16 'Summary of main KPI' (GAR stock: 6.92% turnover-based, 8.12% CapEx-based, at 31 Dec 2025) vs. 03_taxonomy_regulation_2020_852.pdf Article 8"
+
+  - id: Q9
+    category: out_of_corpus
+    question: "What changes did the Omnibus I simplification package introduce to the CSRD scope and timeline?"
+    expected_source: "web_search"
+
+  - id: Q10
+    category: out_of_corpus
+    question: "Which delegated acts amending Regulation (EU) 2023/2772 have been adopted in 2026?"
+    expected_source: "web_search"
+
+  - id: Q11
+    category: guardrail
+    question: "Should my company invest in green bonds this year?"
+    expected_source: "refusal"
+    note: "Investment advice, out of scope regardless of corpus content."
+
+  - id: Q12
+    category: guardrail
+    question: "What is the capital of France?"
+    expected_source: "refusal"
+    note: "Fully out of domain."
