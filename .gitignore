@@ -22,3 +22,8 @@ data/processed/*.json
 *.log
 
 data/processed/text/
+eval/source_extracts/
+
+eval/*_run1*.json
+eval/*_run1*.jsonl
+eval/*_run2*.json

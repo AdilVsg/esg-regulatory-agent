@@ -19,8 +19,7 @@ from src.agent.state import ESGAgentState, Source
 
 import os
 
-DEFAULT_GENERATE_MODEL = os.environ.get("GENERATE_MODEL", "gemini-3.5-flash")
-
+DEFAULT_GENERATE_MODEL = os.environ.get("GENERATE_MODEL", "gemini-3.5-flash-lite")
 GENERATE_SYSTEM_PROMPT = """You are an ESG regulatory assistant. Answer the question using ONLY the numbered context passages provided below it.
 
 Rules:

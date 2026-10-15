@@ -22,23 +22,20 @@ from typing import Literal
 import os
 
 from google import genai
-from google.genai import errors as genai_errors
 from google.genai import types
 from pydantic import BaseModel, Field
-from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
 
 from src.agent.state import ESGAgentState
+from src.agent.gemini_retry import generate_with_retry
 
-# Router classification is a lightweight task, doesn't need full Flash
-# reasoning, and Flash-Lite models carry a meaningfully higher free-tier
-# daily quota than Flash. Overridable via env var since model
-# availability has already shifted twice on this project (gpt-4o-mini ->
-# gemini-2.5-flash unavailable -> gemini-3.6-flash's 20 RPD cap) -- if
-# gemini-3.1-flash-lite isn't available on your account either, override
-# this without touching code. Check what's actually available with:
-#   for m in genai.Client().models.list(): print(m.name)
-DEFAULT_ROUTER_MODEL = os.environ.get("ROUTER_MODEL", "gemini-3.1-flash-lite")
-
+# Router classification is a lightweight task and doesn't need full Flash
+# reasoning. Overridable via env var because model availability has shifted
+# four times on this project: gpt-4o-mini, then gemini-2.5-flash unavailable,
+# then gemini-3.6-flash's 20 RPD cap, then gemini-3.1-flash-lite saturating
+# for a whole evening in September 2026. The default below is the model the
+# published evaluation was run on. Check what's available on your account:
+#   c = genai.Client(); [print(m.name) for m in c.models.list()]
+DEFAULT_ROUTER_MODEL = os.environ.get("ROUTER_MODEL", "gemini-3.5-flash-lite")
 ROUTER_SYSTEM_PROMPT = """You are the routing component of an ESG regulatory assistant.
 
 Your knowledge base is a fixed, offline snapshot of exactly five documents:
@@ -130,29 +127,6 @@ class RouteDecision(BaseModel):
     )
 
 
-def _is_rate_limit_error(exc: BaseException) -> bool:
-    """True for HTTP 429 (quota exceeded) and any 5xx server error
-    (Google's infrastructure temporarily overloaded). Not for other
-    errors like a malformed request or an auth failure, which
-    retrying won't fix. Name kept as-is even though it now covers more
-    than rate limiting, to avoid an unrelated rename in a tested,
-    stable file -- see is_transient_error in gemini_retry.py for the
-    same logic under a more accurate name."""
-    if isinstance(exc, genai_errors.ClientError) and getattr(exc, "code", None) == 429:
-        return True
-    return isinstance(exc, genai_errors.ServerError)
-
-
-@retry(
-    retry=retry_if_exception(_is_rate_limit_error),
-    wait=wait_exponential(multiplier=1, min=15, max=60),
-    stop=stop_after_attempt(4),
-    reraise=True,
-)
-def _generate_with_retry(client: genai.Client, **kwargs):
-    return client.models.generate_content(**kwargs)
-
-
 def build_router(model: str = DEFAULT_ROUTER_MODEL):
     """
     Factory returning a LangGraph-compatible router node.
@@ -166,7 +140,7 @@ def build_router(model: str = DEFAULT_ROUTER_MODEL):
     client = genai.Client()
 
     def router_node(state: ESGAgentState) -> dict:
-        response = _generate_with_retry(
+        response = generate_with_retry(
             client,
             model=model,
             contents=state["question"],

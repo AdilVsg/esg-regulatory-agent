@@ -8,47 +8,198 @@
 # expected_source locations verified by hand against the downloaded PDFs on
 # 2026-07-22. Page numbers are PDF page indices (pdftotext output), noted
 # against printed page numbers where the two differ (the URDs have front matter).
+#
+# gold_answer is the reference answer used by RAGAS for context_precision and
+# context_recall. It exists only for Q1-Q8, the questions routed to RAG: context
+# metrics are meaningless on the web-search route, whose contexts come from
+# Tavily and are not controlled, and on the refusal route, which has no context
+# at all. Routing itself is measured separately by eval/router_eval.py.
+#
+# Each reference is written strictly from the corpus pages listed in
+# expected_source, and deliberately contains nothing else. A claim that is true
+# but absent from the documents would be scored by context_recall as a retrieval
+# miss, penalising the retriever for something it had no way to find.
+#
+# Known gap on Q1: the CSRD never states the numeric thresholds defining a large
+# undertaking. It cross-references Article 3(4) of Directive 2013/34/EU, which is
+# not part of the corpus. The reference therefore covers only the thresholds that
+# are actually present: the 500-employee threshold driving the staged application
+# and the EUR 150 million / EUR 40 million thresholds for third-country
+# undertakings. If the agent produces the 2013/34/EU figures from parametric
+# knowledge, a low faithfulness score on Q1 is a true signal, not an artefact.
 
 questions:
   - id: Q1
     category: retrieval
     question: "Which categories of undertakings fall within the scope of the CSRD, and what are the size thresholds?"
-    expected_source: "01_csrd_directive_2022_2464.pdf — Recital 17 (scope rationale); Article 5(2) (staged thresholds by employee count, financial years 2024-2026)"
+    expected_source: "01_csrd_directive_2022_2464.pdf — PDF p.5 Recital 17 (scope rationale); PDF p.28 Article 19a as replaced (categories of undertakings); PDF p.63-64 Article 5(2) (staged application by employee count, financial years 2024-2026)"
+    gold_answer: >-
+      The CSRD extends sustainability reporting to all large undertakings and to all
+      undertakings, except micro undertakings, whose securities are admitted to trading on an
+      EU regulated market. The replacement Article 19a of Directive 2013/34/EU requires large
+      undertakings, and small and medium-sized undertakings other than micro undertakings that
+      are public-interest entities, to include sustainability information in their management
+      report. Before this amendment the obligation applied only to large public-interest
+      entities with more than 500 employees on average, and to public-interest entities that
+      were parent undertakings of a large group exceeding 500 employees on a consolidated
+      basis. Third-country undertakings generating more than EUR 150 million of net turnover in
+      the Union and having a subsidiary or a branch there are also covered, with a EUR 40
+      million net turnover threshold applying to branches. Article 5(2) staggers application to
+      financial years starting on or after 1 January 2024 for large public-interest entities
+      above 500 employees, 1 January 2025 for other large undertakings and parent undertakings
+      of large groups, and 1 January 2026 for listed small and medium-sized undertakings that
+      are not micro undertakings, which may additionally opt out for a two-year transitional
+      period by stating their reasons in the management report.
 
   - id: Q2
     category: retrieval
     question: "What is the double materiality principle as defined in ESRS 1, and how does it differ from single materiality?"
     expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.8 para 21 (intro), PDF p.10-11 section 3.3 para 37 (formal definition: impact materiality + financial materiality)"
+    gold_answer: >-
+      ESRS 1 requires the undertaking to report on sustainability matters on the basis of the
+      double materiality principle, which has two dimensions: impact materiality and financial
+      materiality. A sustainability matter is material when it meets the criteria of either
+      dimension, or both. It is material from an impact perspective when it relates to the
+      undertaking's actual or potential, positive or negative impacts on people or the
+      environment over the short, medium or long term, including impacts connected with its own
+      operations and with its upstream and downstream value chain. It is material from a
+      financial perspective when it triggers, or could reasonably be expected to trigger,
+      material financial effects, meaning risks or opportunities that materially influence the
+      undertaking's development, financial position, financial performance, cash flows, access
+      to finance or cost of capital. The two assessments are interrelated and the starting point
+      is generally the assessment of impacts, but impacts are captured by the impact materiality
+      perspective irrespective of whether they are also financially material. Financial
+      materiality for sustainability reporting is itself an expansion of the materiality scope
+      used to determine what is included in the financial statements.
 
   - id: Q3
     category: retrieval
     question: "What are the Scope 1, Scope 2 and Scope 3 greenhouse gas disclosure requirements under ESRS E1?"
     expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.91-93, Disclosure Requirement E1-6 paras 44-51 (gross Scope 1/2/3 and total GHG emissions)"
+    gold_answer: >-
+      Disclosure Requirement E1-6 requires the undertaking to disclose, in metric tonnes of CO2
+      equivalent, its gross Scope 1, gross Scope 2 and gross Scope 3 GHG emissions together with
+      total GHG emissions. The Scope 1 disclosure must also state the percentage of those
+      emissions covered by regulated emission trading schemes, and the Scope 2 disclosure must
+      give both a location-based and a market-based figure. Scope 1 and Scope 2 emissions must
+      be disaggregated between the consolidated accounting group and investees such as
+      associates, joint ventures or unconsolidated subsidiaries over which the undertaking has
+      operational control. Gross Scope 3 emissions must be reported for each significant Scope 3
+      category, that is each category that is a priority for the undertaking. Total GHG emissions
+      are the sum of Scopes 1, 2 and 3, disclosed with a distinction between the total derived
+      from a location-based Scope 2 measurement and the total derived from a market-based one.
+      The undertaking must additionally disclose its GHG intensity, expressed as total GHG
+      emissions per net revenue.
 
   - id: Q4
     category: retrieval
     question: "What are the six environmental objectives of the EU Taxonomy Regulation?"
-    expected_source: "03_taxonomy_regulation_2020_852.pdf — Article 9"
+    expected_source: "03_taxonomy_regulation_2020_852.pdf — PDF p.17, Article 9"
+    gold_answer: >-
+      Article 9 of the EU Taxonomy Regulation sets out six environmental objectives: climate
+      change mitigation; climate change adaptation; the sustainable use and protection of water
+      and marine resources; the transition to a circular economy; pollution prevention and
+      control; and the protection and restoration of biodiversity and ecosystems. These
+      objectives are the reference point for the rest of the Regulation: under Article 3 an
+      economic activity qualifies as environmentally sustainable only where it contributes
+      substantially to one or more of them in accordance with Articles 10 to 16 and does not
+      significantly harm any of them in accordance with Article 17. Article 10 develops the first
+      objective by defining substantial contribution to climate change mitigation, and Article 11
+      does the same for climate change adaptation. Undertakings within the scope of Article 8
+      must disclose how and to what extent their activities are associated with economic
+      activities qualifying as environmentally sustainable under Articles 3 and 9.
 
   - id: Q5
     category: retrieval
     question: "What does the 'Do No Significant Harm' (DNSH) principle require, and how is it assessed?"
-    expected_source: "03_taxonomy_regulation_2020_852.pdf — Article 3(b) (criterion), Article 17 (per-objective significant harm tests)"
+    expected_source: "03_taxonomy_regulation_2020_852.pdf — PDF p.15 Article 3(b) (criterion), PDF p.23 Article 17 (per-objective significant harm tests)"
+    gold_answer: >-
+      Under Article 3(b) of the Taxonomy Regulation an economic activity qualifies as
+      environmentally sustainable only if it does not significantly harm any of the six
+      environmental objectives listed in Article 9, assessed in accordance with Article 17.
+      Article 17(1) defines significant harm for each objective: significant greenhouse gas
+      emissions for climate change mitigation; an increased adverse impact of the current and
+      expected future climate on the activity itself or on people, nature and assets for
+      adaptation; detriment to the good status or good ecological potential of water bodies or to
+      the good environmental status of marine waters; significant inefficiencies in the use of
+      materials or natural resources, or a significant increase in the generation, incineration
+      or disposal of waste, for the circular economy; a significant increase in emissions of
+      pollutants into air, water or land compared with the situation before the activity started;
+      and significant detriment to the good condition and resilience of ecosystems or to the
+      conservation status of habitats and species, including those of Union interest. The
+      assessment takes into account the life cycle of the products and services provided by the
+      activity, including evidence from existing life-cycle assessments. Article 17(2) requires
+      both the environmental impact of the activity itself and that of its products and services
+      to be considered, in particular their production, use and end of life. The Commission
+      supplements Article 17 through delegated acts that establish, for each relevant
+      environmental objective, technical screening criteria specifying the minimum requirements
+      needed to avoid significant harm.
 
   - id: Q6
     category: retrieval
     question: "Which phase-in reliefs are available to undertakings with fewer than 750 employees under ESRS 1?"
     expected_source: "02_esrs_set1_2023_2772.pdf — PDF p.26 para 137 (Appendix C reference), PDF p.37-41 Appendix C table (phase-in provisions, 750-employee threshold appears p.37 and p.39)"
+    gold_answer: >-
+      Appendix C of ESRS 1 lists the phased-in Disclosure Requirements, and several of them are
+      keyed to a threshold of 750 employees on average during the financial year, measured on a
+      consolidated basis where applicable. Undertakings or groups that do not exceed that
+      threshold may omit the datapoints on Scope 3 emissions and on total GHG emissions required
+      by ESRS E1-6 for the first year of preparation of their sustainability statement. They may
+      omit all the disclosure requirements of ESRS S1 for the first year, and all the disclosure
+      requirements of ESRS E4, ESRS S2, ESRS S3 and ESRS S4 for the first two years. By way of
+      derogation, undertakings referred to in Article 5(2), first subparagraph point (a) and third
+      subparagraph point (a) of Directive (EU) 2022/2464 that stay below 750 employees may extend
+      the E1-6 and S1 omissions to the first three years, and the same three-year period applies
+      to ESRS E4, S2, S3 and S4.
 
   - id: Q7
     category: cross_doc
     question: "How does Schneider Electric's reported Scope 3 emissions methodology compare with the requirements set out in ESRS E1?"
-    expected_source: "04_schneider_electric_urd_2024.pdf — PDF p.149 (printed p.147), section 2.2.2.1.5 'Gross Scopes 1, 2 and 3 and Total GHG emissions' (GHG Protocol Corporate Value Chain / Scope 3 Standard, upstream/downstream breakdown table) vs. 02_esrs_set1_2023_2772.pdf PDF p.91-93 (E1-6)"
+    expected_source: "04_schneider_electric_urd_2024.pdf — PDF p.149-151 (printed p.147-149), section 2.2.2.1.5 'Gross Scopes 1, 2 and 3 and Total GHG emissions' (GHG Protocol Corporate Value Chain / Scope 3 Standard, upstream/downstream breakdown table) vs. 02_esrs_set1_2023_2772.pdf PDF p.91-93 (E1-6)"
+    gold_answer: >-
+      Schneider Electric states that it calculates its carbon footprint across the three scopes
+      in conformance with the GHG Protocol Corporate Accounting Standard and the Corporate Value
+      Chain (Scope 3) Standard, using an operational control approach for Scopes 1 and 2. Its
+      Scope 3 methodology is described category by category, covering purchased goods and
+      services, capital goods, fuel- and energy-related activities, upstream and downstream
+      transportation, waste generated in operations, business travel, employee commuting, use of
+      sold products and end-of-life treatment, with emission factors taken from sources such as
+      EPA, Ecoinvent, ADEME, DEFRA and the International Energy Agency. That category-level
+      breakdown matches the requirement in ESRS E1-6 paragraph 51 to disclose gross Scope 3
+      emissions for each significant Scope 3 category, and the figures are reported in metric
+      tonnes of CO2 equivalent as paragraph 44 requires. The disclosed split is dominated by
+      downstream emissions: use of sold products accounts for 42.6 MtCO2e and end-of-life
+      treatment, mostly SF6, for 4.5 MtCO2e, against 6.6 MtCO2e for purchased goods and services,
+      so downstream represents 85% of the footprint, upstream 14% and the company's own operations
+      less than 1%. This is consistent with the objective stated in ESRS E1-6 paragraph 45(c),
+      which notes that Scope 3 may be the main component of an undertaking's GHG inventory and an
+      important driver of its transition risks. Schneider Electric also reports that biogenic CO2
+      emissions not included in Scopes 1, 2 and 3 are zero, since it does not consume or combust
+      biomass on its sites.
 
   - id: Q8
     category: cross_doc
     question: "Does BNP Paribas's sustainability report disclose its Green Asset Ratio, and how does this relate to the EU Taxonomy Regulation?"
-    expected_source: "05_bnp_paribas_urd_2025.pdf — PDF p.760, Table 16 'Summary of main KPI' (GAR stock: 6.92% turnover-based, 8.12% CapEx-based, at 31 Dec 2025) vs. 03_taxonomy_regulation_2020_852.pdf Article 8"
+    expected_source: "05_bnp_paribas_urd_2025.pdf — PDF p.760, Table 16 'Summary of main KPI' (GAR stock: 6.92% turnover-based, 8.12% CapEx-based, at 31 Dec 2025) vs. 03_taxonomy_regulation_2020_852.pdf PDF p.17 Article 8"
+    gold_answer: >-
+      Yes. BNP Paribas discloses a Green Asset Ratio in its sustainability statements, presented
+      as the main key performance indicator to be published by credit institutions in accordance
+      with Article 8 of Regulation (EU) 2020/852. At 31 December 2025 the GAR stock stands at
+      6.92% on a turnover basis and 8.12% on a CapEx basis, corresponding to EUR 23,417 million
+      and EUR 27,487 million of exposure to Taxonomy-aligned activities, with a coverage of 13.45%
+      of total assets. Those figures are up from 1.84% and 2.12% a year earlier, an increase the
+      bank attributes mainly to the simplifications introduced by Delegated Regulation (EU)
+      2026/73 of 4 July 2025 and in particular to a reduction of the denominator by EUR 938
+      billion. Article 8 of the Taxonomy Regulation is the legal basis for the disclosure: it
+      requires undertakings subject to Article 19a or Article 29a of Directive 2013/34/EU to state
+      how and to what extent their activities are associated with economic activities qualifying
+      as environmentally sustainable under Articles 3 and 9, with the content and presentation
+      specified by a delegated act. BNP Paribas computes the ratio on its prudential scope of
+      consolidation under Commission Delegated Regulation (EU) 2021/2178 and reports additional
+      indicators, including a GAR flow of 6.47% on a turnover basis and an assets-under-management
+      ratio of 2.88%. The bank also sets out the limits of the indicator, noting that assets not
+      eligible to the taxonomy weigh 21% of the covered assets and that the share of aligned
+      assets among eligible assets alone reaches 8.7%.
 
   - id: Q9
     category: out_of_corpus

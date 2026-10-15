@@ -1,0 +1,70 @@
+{
+  "run_at": "2026-10-05T09:33:45+00:00",
+  "judge_model": "gemini-3.5-flash-lite",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "n_questions": 8,
+  "aggregate": {
+    "faithfulness": 0.9021,
+    "answer_relevancy": 0.783,
+    "context_precision": 0.1181,
+    "context_recall": 0.3211
+  },
+  "per_question": [
+    {
+      "id": "Q1",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8059,
+      "context_precision": 0.0,
+      "context_recall": 0.2
+    },
+    {
+      "id": "Q2",
+      "faithfulness": 0.9167,
+      "answer_relevancy": 0.8781,
+      "context_precision": 0.0,
+      "context_recall": 0.3333
+    },
+    {
+      "id": "Q3",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8763,
+      "context_precision": 0.1111,
+      "context_recall": 0.5
+    },
+    {
+      "id": "Q4",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.5833,
+      "context_recall": 0.5
+    },
+    {
+      "id": "Q5",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8622,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "id": "Q6",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8581,
+      "context_precision": 0.25,
+      "context_recall": 0.75
+    },
+    {
+      "id": "Q7",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "id": "Q8",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9832,
+      "context_precision": 0.0,
+      "context_recall": 0.2857
+    }
+  ]
+}

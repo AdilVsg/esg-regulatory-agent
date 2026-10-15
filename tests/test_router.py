@@ -20,20 +20,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import ValidationError
 
-from src.agent.router import RouteDecision, _is_rate_limit_error, build_router
-
-
-def test_is_rate_limit_error_matches_429_and_5xx():
-    from google.genai import errors as genai_errors
-
-    rate_limited = genai_errors.ClientError(429, {"error": {"message": "quota"}})
-    bad_request = genai_errors.ClientError(400, {"error": {"message": "bad request"}})
-    server_overloaded = genai_errors.ServerError(503, {"error": {"message": "unavailable"}})
-
-    assert _is_rate_limit_error(rate_limited) is True
-    assert _is_rate_limit_error(server_overloaded) is True
-    assert _is_rate_limit_error(bad_request) is False
-    assert _is_rate_limit_error(ValueError("unrelated")) is False
+from src.agent.router import RouteDecision, build_router
 
 def test_route_decision_accepts_valid_route_and_doc_scope():
     decision = RouteDecision(route="rag", doc_scope="regulatory", reasoning="In corpus.")

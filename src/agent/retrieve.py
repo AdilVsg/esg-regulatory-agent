@@ -18,7 +18,7 @@ instead of re-deriving scope from distance.
 from src.agent.state import ESGAgentState, RetrievedDoc
 from src.retrieval.retriever import retrieve
 
-TOP_K = 5
+TOP_K = 10
 
 
 def _distance_to_score(distance: float) -> float:
@@ -45,7 +45,17 @@ def retrieve_node(state: ESGAgentState) -> dict:
     else:
         regulatory_chunks = retrieve(question, doc_type="regulatory", k=TOP_K)
         corporate_chunks = retrieve(question, doc_type="corporate", k=TOP_K)
-        chunks = sorted(regulatory_chunks + corporate_chunks, key=lambda c: c["distance"])[:TOP_K]
+        # doc_scope "both" means the question compares a company disclosure with a
+        # regulatory requirement, so both sides must survive into the context.
+        # Merging the pools and truncating to TOP_K did not guarantee that:
+        # whichever document scored better could take every slot. Observed on
+        # 2026-09-23, Q7 retrieved five Schneider chunks and zero ESRS ones, and
+        # the agent correctly refused to answer a comparison it had no basis for.
+        half = TOP_K // 2
+        chunks = sorted(
+            regulatory_chunks[:half] + corporate_chunks[:TOP_K - half],
+            key=lambda c: c["distance"],
+        )
 
     retrieved_docs: list[RetrievedDoc] = [
         {
