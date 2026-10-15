@@ -83,18 +83,31 @@ including one that stopped being available to new accounts mid-development.
 
 ## API
 
-Two endpoints:
+Two endpoints, `GET /health` and `POST /query`.
+
+The Cloud Run service is not public. Every call runs a Gemini generation and
+possibly a Tavily search, so an open endpoint would let anyone spend the
+project's quota. Callers need the `roles/run.invoker` IAM role on the service and
+pass an identity token; the service is also capped at one instance
+(`--max-instances 1`). Authentication is handled by Cloud Run, not by the
+application code.
 
 ```bash
-curl https://<your-cloud-run-url>/health
+TOKEN=$(gcloud auth print-identity-token)
+
+curl -H "Authorization: Bearer $TOKEN" https://<your-cloud-run-url>/health
 
 curl -X POST https://<your-cloud-run-url>/query \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"question": "What are the six environmental objectives of the EU Taxonomy Regulation?"}'
 ```
 
+Running locally with `uvicorn` (see Setup) needs no token.
+
 The response carries the answer, the route the agent took, and the sources it
-cited:
+cited. If the agent fails, the API returns a generic 500 and the exception
+is written to the server logs, never to the response body.
 
 ```json
 {

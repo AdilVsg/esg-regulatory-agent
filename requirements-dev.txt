@@ -1,6 +1,7 @@
 -r requirements.txt
 
 pytest==9.1.1
+httpx==0.28.*  # required by FastAPI's TestClient in tests/test_api.py
 ragas==0.2.15
 langchain-google-genai==2.1.12
 langchain-huggingface==0.3.1
