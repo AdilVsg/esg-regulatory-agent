@@ -1,4 +1,5 @@
 # ESG Regulatory Agent
+![CI](https://github.com/AdilVsg/esg-regulatory-agent/actions/workflows/ci.yml/badge.svg)
 
 An agentic RAG assistant that answers questions on EU sustainability reporting
 regulation (CSRD, ESRS, EU Taxonomy) by combining retrieval over a curated
