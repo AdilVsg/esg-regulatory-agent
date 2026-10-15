@@ -219,7 +219,7 @@ implemented.
 - [x] FastAPI service
 - [x] Dockerization
 - [x] Cloud Run deployment
-- [ ] CI/CD (GitHub Actions)
+- [x] CI/CD (GitHub Actions)
 - [ ] Query decomposition for cross-document questions
 
 ## Setup
