@@ -3,12 +3,10 @@ Run the router against the 12-question test set and print its decision
 for each one, so you can eyeball whether the classification matches
 what you'd expect per category.
 
-Requires a real GEMINI_API_KEY in the environment (same key as
-basic_rag.py). Not runnable in the sandbox this was written in, no
-network access to Google's API from there, so run this locally:
+Requires a real GEMINI_API_KEY in the environment:
 
     $env:GEMINI_API_KEY = "..."
-    py -3.12 -m eval.router_eval
+    python -m eval.router_eval
 
 Expected mapping, as a starting point to eyeball against (adjust if
 your test set's categories don't line up exactly this way):

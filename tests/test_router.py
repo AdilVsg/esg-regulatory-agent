@@ -9,8 +9,8 @@ Two things are checked here, deliberately kept separate:
 
 2. Node wiring: does router_node correctly turn a RouteDecision into
    the state update dict, including doc_scope? The Gemini call itself
-   is mocked, because this sandbox has no network access to Google's
-   API. This test proves the plumbing is correct, not that the
+   is mocked, so the suite runs offline and in CI without an API key.
+   This test proves the plumbing is correct, not that the
    classification is accurate. Real classification quality must be
    checked by running eval/router_eval.py against the 12-question test
    set with a real GEMINI_API_KEY.

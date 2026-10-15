@@ -17,7 +17,7 @@ Usage, from the repo root:
 
     $env:GEMINI_API_KEY = "..."
     $env:TAVILY_API_KEY = "..."
-    py -3.12 -m eval.generate_answers
+    python -m eval.generate_answers
 
 Interrupted runs resume: questions already present in the output file
 are skipped. Delete eval/rag_outputs.jsonl to force a full rerun.
@@ -27,6 +27,8 @@ import time
 import traceback
 from pathlib import Path
 import os
+
+from src.agent.retrieve import TOP_K
 
 import yaml
 
@@ -116,11 +118,9 @@ def main() -> None:
             # happens to carry. Recorded per question so a run that was
             # interrupted and resumed under a different model is detectable
             # instead of silently mixing two systems in one score.
-            # The models are part of what is being measured: RAGAS scores describe
-            # this configuration, not whatever default the repo happens to carry.
             "router_model": os.environ.get("ROUTER_MODEL", "gemini-3.5-flash-lite"),
             "generate_model": os.environ.get("GENERATE_MODEL", "gemini-3.5-flash-lite"),
-            "top_k": None,  # filled below
+            "top_k": TOP_K,
             "route": result.get("route"),
             "doc_scope": result.get("doc_scope"),
             "route_reasoning": result.get("route_reasoning"),

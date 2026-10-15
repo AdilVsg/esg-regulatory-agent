@@ -1,5 +1,5 @@
 """
-Assembles the week-2 LangGraph agent:
+Assembles the LangGraph agent:
 
     Router -> "rag"        -> Retrieve    -> Generate -> END
            -> "web_search"  -> Web search -> Generate -> END

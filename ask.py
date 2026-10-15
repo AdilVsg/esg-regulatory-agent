@@ -1,11 +1,11 @@
 """
-Ask a single question to the full week-2 agent graph and print the
+Ask a single question to the full agent graph and print the
 whole trace: route, doc_scope, retrieval score, sources, and the
 final answer. Uses real Gemini calls (router + generate), so it needs
 GEMINI_API_KEY set.
 
 Usage:
-    py -3.12 ask.py "What are the CSRD size thresholds?"
+    python ask.py "What are the CSRD size thresholds?"
 
 With no argument, it prompts interactively instead.
 """

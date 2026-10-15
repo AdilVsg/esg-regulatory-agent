@@ -36,8 +36,11 @@ which half of the corpus is searched. Questions comparing a company disclosure
 against a regulatory requirement get `both`, and the retrieval budget is split
 evenly between the two pools so neither side can be crowded out.
 
-- **Ingestion**: PDF loading, chunking (1000 chars, 150 overlap), embedding into
-  a persistent Chroma store with a `doc_type` metadata split
+- **Ingestion**: PDF text extraction with PyMuPDF, chunking (1000 chars, 150
+  overlap), embedding into a persistent Chroma store with a `doc_type` metadata
+  split. PyMuPDF replaced pypdf after pypdf was found to insert spurious spaces
+  inside words on the two-column Official Journal layouts (`inf or mation`),
+  which degraded retrieval on the CSRD and the Taxonomy Regulation.
 - **Retrieval**: similarity search, `TOP_K = 10`, filtered by `doc_scope`
 - **Agent**: LangGraph state machine over a shared `ESGAgentState` TypedDict
 - **Evaluation**: routing accuracy and RAGAS answer-quality metrics against a
@@ -199,9 +202,6 @@ implemented.
   Article 3(4) of Directive 2013/34/EU for the numeric size thresholds, and that
   directive is not in the corpus. The agent says so rather than filling the gap
   from parametric knowledge, which is the intended behaviour.
-- **PDF text extraction is imperfect.** Official Journal PDFs encode kerning in
-  a way that inserts spaces inside words (`Ar ticle`, `en vironmentally`). The
-  embeddings tolerate it, but it is present in the indexed chunks.
 - **No conversational memory.** `chat_history` exists in the state schema but is
   unused; every question is answered independently.
 - **`retrieval_score` is computed but unused.** The best chunk similarity is

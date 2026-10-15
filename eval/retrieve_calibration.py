@@ -24,7 +24,7 @@ retrieval happens -- but they're still run here with scope "both"
 since this script probes retrieve_node directly, bypassing that.
 
 Run from the repo root:
-    py -3.12 -m eval.retrieve_calibration
+    python -m eval.retrieve_calibration
 """
 import yaml
 

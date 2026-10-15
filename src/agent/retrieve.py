@@ -1,11 +1,12 @@
 """
-Retrieve node: queries the Chroma collection built in week 1 for the
-top-k most relevant chunks to the question, and computes a confidence
-score used later by the graph to decide whether to fall back to web
-search.
+Retrieve node: queries the Chroma collection for the top-k chunks most
+relevant to the question, and records the best chunk's similarity as
+retrieval_score. That score is not acted on yet: no threshold routes a
+low-confidence question to web search or refusal (see the README's
+limitations).
 
-Reuses src/retrieval/retriever.py from week 1 rather than duplicating
-the Chroma connection logic. Which doc_type pool(s) get searched is
+Reuses src/retrieval/retriever.py rather than duplicating the Chroma
+connection logic. Which doc_type pool(s) get searched is
 driven by doc_scope, set by the router: merging both pools and
 sorting by raw distance turned out not to be enough, because a
 company's own restatement of a regulatory concept can score closer to

@@ -1,9 +1,8 @@
 """
 Tests for src/agent/web_search.py.
 
-The Tavily call is mocked: this sandbox has no network access to
-Tavily's API, and even with a real key, live search results would
-make this test non-deterministic anyway.
+The Tavily call is mocked: live search results would make the test
+non-deterministic, and the suite has to run in CI without an API key.
 """
 from unittest.mock import MagicMock, patch
 

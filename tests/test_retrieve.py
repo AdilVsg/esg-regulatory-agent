@@ -1,17 +1,15 @@
 """
 Tests for src/agent/retrieve.py.
 
-The Chroma call itself is mocked: this sandbox has no network access
-to Hugging Face to download the BAAI/bge-small-en-v1.5 model weights,
-and no access to your local Chroma database either. These tests prove
-the doc_scope routing and score conversion are correct, not that real
-retrieval quality is good on your corpus -- check that empirically
-with eval/retrieve_calibration.py.
+The Chroma call itself is mocked, so the suite needs neither the
+embedding model weights nor a built vector store, and runs in CI.
+These tests prove the doc_scope routing and score conversion are
+correct, not that retrieval quality is good on the real corpus --
+that is measured by eval/retrieve_calibration.py and the RAGAS run.
 """
 from unittest.mock import patch
 
-from src.agent.retrieve import _distance_to_score, retrieve_node
-from src.agent.retrieve import TOP_K, retrieve_node
+from src.agent.retrieve import TOP_K, _distance_to_score, retrieve_node
 
 
 def test_distance_to_score_is_bounded_and_monotonic():

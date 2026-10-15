@@ -1,11 +1,10 @@
 """
 Tests for src/agent/generate.py.
 
-The Gemini call is mocked, same reason as test_router.py: no network
-access to Google's API from this sandbox. These tests prove the
+The Gemini call is mocked, same reason as test_router.py: the suite
+runs offline and in CI without an API key. These tests prove the
 context-building and source-list wiring are correct, not that the
-generated prose is actually good -- that needs a real GEMINI_API_KEY
-and your own judgment on a few real questions.
+generated prose is good -- that is what the RAGAS evaluation measures.
 """
 from unittest.mock import MagicMock, patch
 

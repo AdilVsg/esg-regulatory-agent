@@ -12,11 +12,9 @@ before any retrieval happens.
 - "refuse": the question is unrelated to EU sustainability reporting
   regulation or to the two named companies' disclosures.
 
-Uses Google Gemini (free tier, no credit card) via the google-genai
-SDK, the same client already used in src/agent/basic_rag.py for week
-1. Structured output is enforced with response_schema set to a
-Pydantic model, so the SDK returns a parsed, validated object instead
-of free text to parse ourselves.
+Uses Google Gemini via the google-genai SDK. Structured output is
+enforced with response_schema set to a Pydantic model, so the SDK
+returns a parsed, validated object instead of free text to parse.
 """
 from typing import Literal
 import os
@@ -134,8 +132,7 @@ def build_router(model: str = DEFAULT_ROUTER_MODEL):
     Kept as a factory (rather than a bare function) so the client is
     built once and reused across every invocation of the node, instead
     of being reconstructed on every question. genai.Client() reads
-    GEMINI_API_KEY from the environment automatically, same as
-    basic_rag.py.
+    GEMINI_API_KEY from the environment automatically.
     """
     client = genai.Client()
 

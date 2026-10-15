@@ -6,6 +6,5 @@ __pycache__/
 .git
 tests/
 eval/
-app/
 data/raw/
 deploy/

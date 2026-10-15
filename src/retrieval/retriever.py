@@ -1,8 +1,7 @@
 """
-Reusable retrieval interface over the Chroma collection built by
-chunk_and_embed.py. Used by the basic RAG chain (this week) and later
-by the LangGraph agent (next week) so retrieval logic lives in one place
-instead of being duplicated across scripts.
+Retrieval interface over the Chroma collection built by
+chunk_and_embed.py. Used by the agent's retrieve node and by the
+evaluation scripts, so the Chroma connection logic lives in one place.
 """
 import os
 
